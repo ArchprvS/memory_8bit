@@ -1,0 +1,42 @@
+body {
+    background-color: rgb(70, 70, 70);
+}
+body > * {
+    font-family: 'Jersey 15', serif;
+    font-size: 25px;
+}
+
+#interfaceContainer {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+}
+#interfaceContainer > * {
+    margin: 10px;
+}
+.cardsBox {
+    display: grid;
+    grid-template-columns: repeat(4, 60px);
+    grid-template-rows: repeat(4, 60px);
+    gap: 8px;
+    justify-content: center;
+    margin: 20px;
+}
+.card {
+    font-family: 'Jersey 15', serif;
+    font-size: 45px;
+    background-color: rgb(39, 39, 39);
+    color: rgb(39, 39, 39);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    transform: rotate3d(0, 1, 0, 180deg);;
+    transition: all 0.5s ease-in-out;
+}
+.showCard {
+    color: rgb(0, 0, 0);
+    transform: rotate3d(0, 1, 0, 0deg);
+    transition: all 0.5s ease-in-out;
+}
