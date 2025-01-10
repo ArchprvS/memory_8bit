@@ -3,9 +3,6 @@ document.addEventListener("DOMContentLoaded", () => {
     //Globals
     let cardsContainer = document.querySelector('#cardsContainer');
     let displayCounter = document.querySelector('#displayCounter');
-    let movsCounter = 0;
-    let compareCards = [];
-    let disabledCards = [];
     
     // Cards Table
 
@@ -61,71 +58,55 @@ document.addEventListener("DOMContentLoaded", () => {
     
     // Mechanics 
     
-    const addMechanics = () => {
-    
-        let card = document.getElementsByClassName('card');
+    const Mechanics = () => {
 
-        // Card mechanics
-        // JPRDL Działa ale trzeba dodać kolejne iteracje
+        let comparedCards = [];
 
-        const listenerFunction = (element) => {
-            
-                compareCards.push(element);
+        const cardListener = (event) => {
 
-                if (compareCards.length <= 2 && disabledCards.includes(element) == false) {
-                    element.classList.toggle('showCard');
+            let currentCard = event.currentTarget;
+
+            // pushing compared cards to array
+            if(comparedCards.length < 2) {
+                comparedCards.push(currentCard);
+                currentCard.classList.toggle('showCard');
+            }
+            if(comparedCards.length === 2) {
+                if (comparedCards[0].innerText === comparedCards[1].innerText) {
+                    comparedCards.forEach(card => {
+                        card.removeEventListener('click', cardListener);
+                    })
+                    comparedCards = [];
                 }
-                if (compareCards.length == 2 && compareCards[0].innerText == compareCards[1].innerText) {
-
-                    // Counting moves
-                    movsCounter++;
-                    displayCounter.innerText = `MOVES: ${movsCounter}`;
-
-                    // Disabling cards
-                    disabledCards.push(...compareCards);
-                    console.log(disabledCards);
-
-                    // Clearing array
-                    compareCards = [];
-
-                }
-                else if (compareCards.length == 2 && compareCards[0].innerText != compareCards[1].innerText) {
+                else {
                     setTimeout(() => {
-
-                        // Counting moves
-                        movsCounter++;
-                        displayCounter.innerText = `MOVES: ${movsCounter}`;
-
-                        // Hiding cards
-                        compareCards[0].classList.toggle('showCard');
-                        compareCards[1].classList.toggle('showCard');
-
-                        // Clearing array
-                        compareCards = [];
-
-                    }, 1000);
+                        comparedCards.forEach(card => {
+                            card.classList.toggle('showCard');
+                        })
+                        comparedCards = [];
+                    }, 1000)
                 }
+            }
+            console.log(comparedCards);
         }
-
-        // Adding event listener to each card
-        // Metoda bind --> doczytać
         
-        Array.from(card).forEach(element => {
-            element.addEventListener('click', listenerFunction.bind(null, element));
-        })
+        for (let card of box.children) {
+            card.addEventListener('click', cardListener);
+        }
     }
+        
 
     // RESTART/PLAY
     
     const playBtn = document.querySelector('#play');
     const restartBtn = document.querySelector('#restart');
     let box;
-    
+
     const handlePlay = () => {
         box = generateBoard();
         cardsContainer.appendChild(box);
+        Mechanics();
         playBtn.removeEventListener('click', handlePlay);
-        addMechanics();
         displayCounter.innerText = `MOVES: 0`;
     }
 
@@ -135,15 +116,8 @@ document.addEventListener("DOMContentLoaded", () => {
         cardsContainer.removeChild(box);
         box = generateBoard();
         cardsContainer.appendChild(box);
-
-        // Calling mechanics
-        addMechanics();
-
-        // Resetting values and arrays
-        movsCounter = 0;
-        displayCounter.innerText = `MOVES: ${movsCounter}`;
-        disabledCards = [];
-        compareCards = [];
+        
+        Mechanics();
     }
 
     playBtn.addEventListener('click', handlePlay);
