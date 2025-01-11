@@ -6,6 +6,8 @@ body > * {
     font-size: 25px;
 }
 
+/* INTERFACE */
+
 #interfaceContainer {
     display: flex;
     flex-direction: row;
@@ -15,6 +17,34 @@ body > * {
 #interfaceContainer > * {
     margin: 10px;
 }
+#displayCounter {
+    border: 3px groove rgb(69, 69, 69);
+    padding-left: 5px;
+    padding-right: 5px;
+}
+.default {
+    transform: scale(1);
+    transition: transform 0.25s ease-in-out;
+}
+.countAnimation {
+    transform: scale(1.4);
+    transition: transform 0.25s ease-in-out;
+}
+#play {
+    background-color: black;
+    color: rgb(156, 156, 156);
+    font-family: 'Jersey 15', serif;
+    font-size: 22px;
+}
+#restart {
+    background-color: black;
+    color: rgb(156, 156, 156);
+    font-family: 'Jersey 15', serif;
+    font-size: 22px;
+}
+
+/* CARDS */
+
 .cardsBox {
     display: grid;
     grid-template-columns: repeat(4, 60px);
@@ -27,16 +57,21 @@ body > * {
     font-family: 'Jersey 15', serif;
     font-size: 45px;
     background-color: rgb(39, 39, 39);
+    border: 3px groove rgb(69, 69, 69);
     color: rgb(39, 39, 39);
     display: flex;
     justify-content: center;
     align-items: center;
     cursor: pointer;
-    transform: rotate3d(0, 1, 0, 180deg);;
+    transform: rotate3d(0, 1, 0, 180deg);
     transition: all 0.5s ease-in-out;
 }
 .showCard {
     color: rgb(0, 0, 0);
     transform: rotate3d(0, 1, 0, 0deg);
     transition: all 0.5s ease-in-out;
+}
+.matchedCard {
+    background-color: gainsboro;
+    transform: rotate3d(0, 1, 0, 720deg);
 }
