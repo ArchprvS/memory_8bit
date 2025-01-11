@@ -61,6 +61,17 @@ document.addEventListener("DOMContentLoaded", () => {
     const Mechanics = () => {
 
         let comparedCards = [];
+        let movsCounter = 0;
+        let matchedCounter = 0;
+
+        const counting = () => {
+            movsCounter++;
+            displayCounter.innerText = `MOVES: ${movsCounter}`;
+            displayCounter.classList.toggle('countAnimation');
+            setTimeout(() => {
+                displayCounter.classList.toggle('countAnimation');
+            }, 250)
+        }
 
         const cardListener = (event) => {
 
@@ -71,14 +82,24 @@ document.addEventListener("DOMContentLoaded", () => {
                 comparedCards.push(currentCard);
                 currentCard.classList.toggle('showCard');
             }
+
+            // comparing cards
             if(comparedCards.length === 2) {
+
+                // cards validity
                 if (comparedCards[0].innerText === comparedCards[1].innerText) {
+                    counting();
                     comparedCards.forEach(card => {
+                        card.classList.add('matchedCard')
                         card.removeEventListener('click', cardListener);
                     })
+                    matchedCounter += 1;
                     comparedCards = [];
                 }
+
+                // cards invalidity
                 else {
+                    counting();
                     setTimeout(() => {
                         comparedCards.forEach(card => {
                             card.classList.toggle('showCard');
@@ -86,10 +107,17 @@ document.addEventListener("DOMContentLoaded", () => {
                         comparedCards = [];
                     }, 1000)
                 }
+
+                // waiting for collection completement
+                if (matchedCounter === 8) {
+                    displayCounter.innerText = `YOU WON IN ${movsCounter}`;
+                }
             }
+            console.log(matchedCounter);
             console.log(comparedCards);
         }
         
+        // addig eventListener to each card
         for (let card of box.children) {
             card.addEventListener('click', cardListener);
         }
@@ -116,6 +144,7 @@ document.addEventListener("DOMContentLoaded", () => {
         cardsContainer.removeChild(box);
         box = generateBoard();
         cardsContainer.appendChild(box);
+        displayCounter.innerText = `MOVES: 0`;
         
         Mechanics();
     }
