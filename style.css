@@ -8,6 +8,23 @@ body > * {
 
 /* INTERFACE */
 
+#cardsContainer {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+}
+#levelsContainer {
+    display: flex;
+    flex-direction: column;
+}
+#levelsContainer > * {
+    background-color: black;
+    color: rgb(156, 156, 156);
+    font-family: 'Jersey 15', serif;
+    font-size: 22px;
+    margin-top: 40px;
+}
 #interfaceContainer {
     display: flex;
     flex-direction: row;
@@ -30,6 +47,9 @@ body > * {
     transform: scale(1.4);
     transition: transform 0.25s ease-in-out;
 }
+.win {
+    background-color: gainsboro;
+}
 #play {
     background-color: black;
     color: rgb(156, 156, 156);
@@ -47,8 +67,8 @@ body > * {
 
 .cardsBox {
     display: grid;
-    grid-template-columns: repeat(4, 60px);
-    grid-template-rows: repeat(4, 60px);
+    /* grid-template-columns: repeat(4, 60px);
+    grid-template-rows: repeat(4, 60px); */
     gap: 8px;
     justify-content: center;
     margin: 20px;
@@ -74,4 +94,8 @@ body > * {
 .matchedCard {
     background-color: gainsboro;
     transform: rotate3d(0, 1, 0, 720deg);
+}
+.winCardAnimation {
+    transform: rotate3d(0, 1, 0, 1440deg);
+    transition: all 1s ease-in-out;
 }

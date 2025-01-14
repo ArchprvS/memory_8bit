@@ -3,13 +3,14 @@ document.addEventListener("DOMContentLoaded", () => {
     //Globals
     let cardsContainer = document.querySelector('#cardsContainer');
     let displayCounter = document.querySelector('#displayCounter');
+    let tableSize = 36;
     
     // Cards Table
 
     let cards = [];
 
-    for (i = 0; i < 26; i++) {
-        cards.push({num: i + 1, identifier: `${String.fromCharCode(65 + i)}`});
+    for (i = 0; i < tableSize; i++) {
+        cards.push({num: i + 1, identifier: `${String.fromCharCode(64 + i)}`});
     }
 
     // Generating array of random indexes
@@ -30,18 +31,21 @@ document.addEventListener("DOMContentLoaded", () => {
         return randomsArray;
     }
 
-    generateRandoms(8);
-
     // Creating HTML card element
 
     const generateBoard = () => {
 
         let cardsBox = document.createElement('div');
-        let cardRandoms = generateRandoms(8);
-        let cardCloneRandoms = generateRandoms(8);
+
+        let gridSize = Math.sqrt(tableSize);
+        cardsBox.style.gridTemplateColumns = `repeat(${gridSize}, 60px)`;
+        cardsBox.style.gridTemplateRows = `repeat(${gridSize}, 60px)`;
+
+        let cardRandoms = generateRandoms(tableSize / 2);
+        let cardCloneRandoms = generateRandoms(tableSize / 2);
         cardsBox.classList.add('cardsBox');
 
-        for(i = 0; i < 8; i++) {
+        for(i = 0; i < tableSize / 2; i++) {
 
             let card = document.createElement('div');
             card.classList.add('card');
@@ -50,7 +54,7 @@ document.addEventListener("DOMContentLoaded", () => {
             let cardClone = card.cloneNode(true);
             cardClone.innerText = cards[cardCloneRandoms[i]].identifier;
 
-            cardsBox.appendChild(card);
+            cardsBox.appendChild(card)
             cardsBox.appendChild(cardClone);
         }
         return cardsBox;
@@ -61,6 +65,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const Mechanics = () => {
 
         let comparedCards = [];
+        let allMatchedCards = [];
         let movsCounter = 0;
         let matchedCounter = 0;
 
@@ -77,8 +82,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
             let currentCard = event.currentTarget;
 
-            // pushing compared cards to array
-            if(comparedCards.length < 2) {
+            // pushing compared cards to array & checking if 2x clicked same card
+            if(comparedCards.length < 2 && currentCard != comparedCards[0]) {
                 comparedCards.push(currentCard);
                 currentCard.classList.toggle('showCard');
             }
@@ -90,7 +95,8 @@ document.addEventListener("DOMContentLoaded", () => {
                 if (comparedCards[0].innerText === comparedCards[1].innerText) {
                     counting();
                     comparedCards.forEach(card => {
-                        card.classList.add('matchedCard')
+                        card.classList.add('matchedCard');
+                        allMatchedCards.push(card);
                         card.removeEventListener('click', cardListener);
                     })
                     matchedCounter += 1;
@@ -109,8 +115,15 @@ document.addEventListener("DOMContentLoaded", () => {
                 }
 
                 // waiting for collection completement
-                if (matchedCounter === 8) {
-                    displayCounter.innerText = `YOU WON IN ${movsCounter}`;
+                if (matchedCounter === tableSize / 2) {
+                    setTimeout(() => {
+                        allMatchedCards.forEach(card => {
+                            card.classList.add('winCardAnimation');
+                            card.innerText = "!";
+                            displayCounter.innerText = `YOU WON IN ${movsCounter}`;
+                            displayCounter.classList.add('win');
+                        });
+                    }, 500)
                 }
             }
             console.log(matchedCounter);
@@ -131,19 +144,24 @@ document.addEventListener("DOMContentLoaded", () => {
     let box;
 
     const handlePlay = () => {
+        generateRandoms(tableSize);
         box = generateBoard();
         cardsContainer.appendChild(box);
         Mechanics();
         playBtn.removeEventListener('click', handlePlay);
         displayCounter.innerText = `MOVES: 0`;
+
+        console.log(box)
     }
 
     const handleRestart = () => {
 
         // Removing old board and generating new one
+        generateRandoms(tableSize);
         cardsContainer.removeChild(box);
         box = generateBoard();
         cardsContainer.appendChild(box);
+        displayCounter.classList.remove('win');
         displayCounter.innerText = `MOVES: 0`;
         
         Mechanics();
