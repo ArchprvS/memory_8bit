@@ -169,4 +169,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
     playBtn.addEventListener('click', handlePlay);
     restartBtn.addEventListener('click', handleRestart);
+
+    // LEVEL SET
 })
