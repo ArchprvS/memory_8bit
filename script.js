@@ -3,13 +3,14 @@ document.addEventListener("DOMContentLoaded", () => {
     //Globals
     let cardsContainer = document.querySelector('#cardsContainer');
     let displayCounter = document.querySelector('#displayCounter');
-    let tableSize = 36;
+    let levelsContainer = document.querySelector('#levelsContainer');
+    let tableSize = 16;
     
     // Cards Table
 
     let cards = [];
 
-    for (i = 0; i < tableSize; i++) {
+    for (i = 0; i < 26; i++) {
         cards.push({num: i + 1, identifier: `${String.fromCharCode(64 + i)}`});
     }
 
@@ -144,31 +145,66 @@ document.addEventListener("DOMContentLoaded", () => {
     let box;
 
     const handlePlay = () => {
-        generateRandoms(tableSize);
-        box = generateBoard();
-        cardsContainer.appendChild(box);
-        Mechanics();
-        playBtn.removeEventListener('click', handlePlay);
-        displayCounter.innerText = `MOVES: 0`;
-
-        console.log(box)
+        levelsContainer.classList.remove('lvlIn');
+        levelsContainer.classList.add('lvlOut');
+        setTimeout(() => {
+            generateRandoms(tableSize);
+            box = generateBoard();
+            cardsContainer.appendChild(box);
+            Mechanics();
+            cardsContainer.removeChild(levelsContainer);
+            setTimeout(() => {box.classList.add('boxIn')}, 20);
+            playBtn.removeEventListener('click', handlePlay);
+            displayCounter.innerText = `MOVES: 0`;
+        }, 500)
     }
 
     const handleRestart = () => {
-
-        // Removing old board and generating new one
-        generateRandoms(tableSize);
-        cardsContainer.removeChild(box);
-        box = generateBoard();
-        cardsContainer.appendChild(box);
-        displayCounter.classList.remove('win');
-        displayCounter.innerText = `MOVES: 0`;
+        box.classList.remove('boxIn');
+        box.classList.add('boxOut');
+        setTimeout(() => {
+            cardsContainer.removeChild(box);
+            cardsContainer.appendChild(levelsContainer);
+            setTimeout(() => {
+                levelsContainer.classList.remove('lvlOut');
+                levelsContainer.classList.add('lvlIn');
+            }, 10);
+            playBtn.addEventListener('click', handlePlay);
+            displayCounter.classList.remove('win');
+            displayCounter.innerText = `MOV COUNTER`;
+        }, 500)
         
-        Mechanics();
     }
 
     playBtn.addEventListener('click', handlePlay);
     restartBtn.addEventListener('click', handleRestart);
 
     // LEVEL SET
+
+    let lvlEasy = document.querySelector('#lvlEasy');
+    let lvlHard = document.querySelector('#lvlHard');
+
+    const levelSetEasy = () => {
+        tableSize = 16;
+        setTimeout(() => {
+            lvlEasy.classList.add('switch');
+            setTimeout(() => {
+                lvlEasy.classList.remove('switch');
+            }, 1000);
+        }, 50)
+    }
+
+    const levelSetHard = () => {
+        tableSize = 36;
+        setTimeout(() => {
+            lvlHard.classList.add('switch');
+            setTimeout(() => {
+                lvlHard.classList.remove('switch');
+            }, 1000);
+        }, 50)
+    }
+
+    lvlEasy.addEventListener('click', levelSetEasy);
+    lvlHard.addEventListener('click', levelSetHard);
+
 })

@@ -14,6 +14,9 @@ body > * {
     align-items: center;
     justify-content: center;
 }
+
+/* levels */
+
 #levelsContainer {
     display: flex;
     flex-direction: column;
@@ -24,7 +27,28 @@ body > * {
     font-family: 'Jersey 15', serif;
     font-size: 22px;
     margin-top: 40px;
+    transform: translateX(0);
+    transition: transform 0.5s ease;
 }
+.lvlOut {
+    transform: translateX(-1000%);
+    transition: transform 0.5s ease;
+}
+.lvlIn {
+    transform: translateX(0);
+    transition: transform 0.5s ease;
+}
+@keyframes scale {
+    from { transform: scale(1.3);}
+    to { transform: scale(1);}
+}
+.switch {
+    animation-name: scale;
+    animation-duration: 1s;
+}
+
+/* interface */
+
 #interfaceContainer {
     display: flex;
     flex-direction: row;
@@ -67,11 +91,18 @@ body > * {
 
 .cardsBox {
     display: grid;
-    /* grid-template-columns: repeat(4, 60px);
-    grid-template-rows: repeat(4, 60px); */
     gap: 8px;
     justify-content: center;
     margin: 20px;
+    transform: translateY(200%);
+}
+.boxIn {
+    transform: translateY(0);
+    transition: transform 0.5s ease;
+}
+.boxOut {
+    transform: translateY(200%);
+    transition: 0.5s ease;
 }
 .card {
     font-family: 'Jersey 15', serif;
